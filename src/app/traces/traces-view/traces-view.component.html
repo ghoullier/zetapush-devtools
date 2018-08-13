@@ -72,6 +72,6 @@
   </mat-table>
 
   <mat-sidenav #sidenav mode="over" position="end">
-    <zp-stack-trace [traces]="selection"></zp-stack-trace>
+    <zp-stack-trace [traces]="selection" (traceNavigation)="traceNavigate($event)" [traceMin]="ctxMin" [traceMax]="ctxMax"></zp-stack-trace>
   </mat-sidenav>
 </mat-sidenav-container>

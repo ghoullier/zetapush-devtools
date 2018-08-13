@@ -119,6 +119,10 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   selection: Trace[];
   services: string[] = [];
   initialized = false;
+  // stack-trace navigation
+  ctxMin: number = 9999;
+  ctxMax: number = 0;
+
   constructor(
     private preferences: PreferencesStorage,
     private route: ActivatedRoute,
@@ -171,9 +175,12 @@ export class TracesViewComponent implements OnDestroy, OnInit {
                 : [];
               queue[trace.n] = trace;
               dictionnary.set(trace.ctx, queue);
+              if (trace.ctx > this.ctxMax) this.ctxMax = trace.ctx;
+              if (trace.ctx < this.ctxMin) this.ctxMin = trace.ctx;
             } catch (e) {
               this.logger.error(trace);
             }
+
             const traces = Array.from(dictionnary.entries())
               .map(([ctx, list]) =>
                 list
@@ -287,5 +294,26 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   onFiltering(filterValue: string) {
     filterValue = filterValue.trim();
     this.source.filter = filterValue;
+  }
+
+  // zp-stack-trace output called function, changing the selection attribute to the next/previous trace
+  traceNavigate(direction: string) {
+    let i = 1;
+    if (direction == 'next') {
+      while (!this.map.has(this.selection[1].ctx + i)) {
+        i++;
+      }
+      this.selection = this.map
+        .get(this.selection[1].ctx + i)
+        .filter((truthy) => truthy);
+    }
+    if (direction == 'prev') {
+      while (!this.map.has(this.selection[1].ctx - i)) {
+        i++;
+      }
+      this.selection = this.map
+        .get(this.selection[1].ctx - i)
+        .filter((truthy) => truthy);
+    }
   }
 }

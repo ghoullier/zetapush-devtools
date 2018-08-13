@@ -1,16 +1,24 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material';
-import {
-  Trace,
-  TraceCompletion,
-  TraceLocation,
-  parseTraceLocation,
-} from '../../api/interfaces/trace.interface';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+// Interface
+import { Trace } from '../../api/interfaces/trace.interface';
 import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
 
 @Component({
   selector: 'zp-stack-trace',
   template: `
+    <span class="navigation">
+      <button mat-raised-button (click)="onNavigationClick('prev')" [disabled] = "filtered[1]?.ctx == traceMin">
+        <mat-icon>navigate_before</mat-icon>
+      </button>
+      <button mat-raised-button (click)="onNavigationClick('next')" [disabled] = "filtered[1]?.ctx == traceMax">
+        <mat-icon>navigate_next</mat-icon>
+      </button>
+      <span class="trace-info">
+        <p><strong>Trace ID : </strong>{{filtered[1]?.ctx}}</p>
+        <p><strong>owner : </strong>{{filtered[1]?.owner}}</p>
+      </span>
+    </span>
     <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
     <table>
       <thead>
@@ -48,8 +56,20 @@ export class StackTraceComponent {
   ];
 
   @Input() traces: Trace[] = [];
+  @Input() traceMin = 0;
+  @Input() traceMax = 9999;
+
+  @Output() traceNavigation = new EventEmitter<string>();
 
   filterTraces(filteredTraces: Trace[]) {
     this.filtered = filteredTraces;
+  }
+
+  onNavigationClick(direction: string) {
+    if (direction == 'next') {
+      this.traceNavigation.emit('next');
+    } else if (direction == 'prev') {
+      this.traceNavigation.emit('prev');
+    }
   }
 }
