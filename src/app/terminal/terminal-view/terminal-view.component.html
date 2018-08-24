@@ -15,7 +15,7 @@
     </mat-button-toggle-group>
   </h1>
   <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
-  <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
+  <zp-stack-filter-terminal [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter-terminal>
 
   <div class="collapse-toggle">
     <mat-slide-toggle

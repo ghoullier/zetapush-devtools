@@ -1,0 +1,23 @@
+<table>
+  <thead>
+    <tr>
+      <th>N</th>
+      <th>Type</th>
+      <th>Content</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let trace of traces" [ngClass]="['Trace', 'Trace--' + trace.type]">
+      <ng-template [ngIf]="checkFilter(trace.type)">
+        <td>{{trace.n}}</td>
+        <td>{{trace.type}}</td>
+        <td>
+          <zp-lazy-json *ngIf="trace.type == 'MS'" [value]="trace.data" [placeholder]="trace.data.name"></zp-lazy-json>
+          <zp-lazy-json *ngIf="trace.type == 'ME'" [value]="trace.data" [placeholder]="trace.data.name" [ngClass]="{'ERROR': trace.error == true}"></zp-lazy-json>
+          <zp-lazy-json *ngIf="trace.type == 'USR'" [value]="trace.data"></zp-lazy-json>
+          <pre *ngIf="(trace.type == 'CMT')">{{trace.data}}</pre>
+        </td>
+      </ng-template>
+    </tr>
+  </tbody>
+</table>

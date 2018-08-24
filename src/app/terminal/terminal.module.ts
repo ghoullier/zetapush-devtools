@@ -11,10 +11,15 @@ import { TerminalRoutingModule } from './terminal-routing.module';
 // Components
 import { TerminalViewComponent } from './terminal-view/terminal-view.component';
 import { JsonViewerComponent } from './json-viewer/json-viewer.component';
+import { StackFilterTerminalComponent } from './stack-filter-terminal/stack-filter-terminal.component';
 
 @NgModule({
   imports: [CommonModule, TerminalRoutingModule, UiModule, SharedModule],
-  declarations: [TerminalViewComponent, JsonViewerComponent],
+  declarations: [
+    TerminalViewComponent,
+    JsonViewerComponent,
+    StackFilterTerminalComponent,
+  ],
   providers: [],
 })
 export class TerminalModule {}

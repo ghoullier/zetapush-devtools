@@ -7,7 +7,23 @@ import { Authentication, Client, services as SERVICES } from 'zetapush-js';
 import { saveAs } from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
 
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+
+// RxJS
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/merge';
+import { Subscription } from 'rxjs/Subscription';
+import { combineLatest } from 'rxjs/operators/combineLatest';
+import { map } from 'rxjs/operators/map';
+import { combineLatest as combine } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
+
+// Service
 import { PreferencesStorage } from '../../api/services/preferences-storage.service';
+
+// Interfaces
 import {
   Trace,
   TraceCompletion,
@@ -15,17 +31,6 @@ import {
   TraceType,
 } from '../../api/interfaces/trace.interface';
 import { CanLeaveViewGuard } from '../../api/guards/canleaveview.guard';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { combineLatest as combine } from 'rxjs';
-import { combineLatest } from 'rxjs/operators/combineLatest';
-import { distinctUntilChanged } from 'rxjs/operators';
-import { map } from 'rxjs/operators/map';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/merge';
-import { forEach } from '@angular/router/src/utils/collection';
 
 export class TraceDataSource extends DataSource<Trace> {
   private _filter = new BehaviorSubject<string>('');
@@ -116,9 +121,12 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   subject = new BehaviorSubject<Trace[]>([]);
   source: TraceDataSource | null;
   columns = ['ctx', 'actions', 'ts', 'name', 'owner'];
-  selection: Trace[];
+  selection: Trace[] = [];
   services: string[] = [];
   initialized = false;
+  navigationBwdDisabled: boolean = false; //input variables for stack-trace component, disabling the navigation between traces
+  navigationFwdDisabled: boolean = false;
+
   constructor(
     private preferences: PreferencesStorage,
     private route: ActivatedRoute,
@@ -166,6 +174,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
             };
             try {
               const { level, ...infos } = trace;
+
               const queue = dictionnary.has(trace.ctx)
                 ? dictionnary.get(trace.ctx)
                 : [];

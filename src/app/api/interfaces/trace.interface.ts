@@ -21,7 +21,7 @@ export interface TraceLocation {
 
 export interface Trace {
   ctx: number;
-  type: TraceType;
+  type: TraceType; //
   n: number;
   data: any;
   line: number;
@@ -29,6 +29,7 @@ export interface Trace {
   owner: string;
   level: TraceLevel;
   ts: number;
+  indent?: number; //niveau d'indentation dans l'arbre
   error?: boolean; //true if the macro ME has an non empty error array
   hasError?: boolean; //true if the calling MS will generate errors
 }

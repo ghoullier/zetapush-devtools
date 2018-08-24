@@ -18,30 +18,30 @@ import {
 import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
 
 @Component({
-  selector: 'zp-stack-filter',
+  selector: 'zp-stack-filter-terminal',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
     `
-    .Form--Filter {
-      font-weight: bold;
-      margin-top: 10px;
-      padding-left: 0.5rem;
-    }
-    .Filter {
-      padding-right: 0.25rem;
-    }
+      .Form--Filter {
+        font-weight: bold;
+        margin-top: 10px;
+        padding-left: 0.5rem;
+      }
+      .Filter {
+        padding-right: 0.25rem;
+      }
     `,
   ],
   template: `
-    <form class="Form Form--Filter">
-      <span>Filter: </span>
-      <mat-checkbox *ngFor="let type of types" [checked]="type.selected" (change)="onChangeType($event, type)" name="filter" class="Filter">
-        {{type.label}}
-      </mat-checkbox>
-    </form>
-  `,
+      <form class="Form Form--Filter">
+        <span>Filter: </span>
+        <mat-checkbox *ngFor="let type of types" [checked]="type.selected" (change)="onChangeType($event, type)" name="filter" class="Filter">
+          {{type.label}}
+        </mat-checkbox>
+      </form>
+    `,
 })
-export class StackFilterComponent implements OnChanges {
+export class StackFilterTerminalComponent implements OnChanges {
   @Input() traces: Trace[] = [];
   @Input() types: ViewTypeFilter[];
 

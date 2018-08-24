@@ -6,10 +6,10 @@ import { MatSnackBar } from '@angular/material';
   template: `
     <div class="LazyJson" [ngClass]="{'LazyJson--Hidden': !show }" >
       <pre *ngIf="show">{{value | json}}</pre>
-      <button mat-icon-button *ngIf="show" ngxClipboard [cbContent]="json" (cbOnSuccess)="onThrowSnackbar()">
+      <button mat-icon-button *ngIf="show" ngxClipboard [cbContent]="json" (cbOnSuccess)="onThrowSnackbar()" matTooltip="Copy JSON to clipboard" [matTooltipShowDelay]="400" matTooltipPosition=right>
         <mat-icon aria-label="Modez, copy dat json!">file_copy</mat-icon>
       </button>
-      <button mat-icon-button *ngIf="show" (click)="onFoldClick()">
+      <button mat-icon-button *ngIf="show" (click)="onFoldClick()" matTooltip="Fold JSON" [matTooltipShowDelay]="400" matTooltipPosition=right>
         <mat-icon aria-label="Modez, copy dat json!">import_export</mat-icon>
       </button>
       <button *ngIf="!show" mat-button (click)="onLazyClick()">
@@ -25,6 +25,11 @@ import { MatSnackBar } from '@angular/material';
         align-items: center;
       }
       .LazyJson--Hidden {
+      }
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
       }
     `,
   ],
